@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
+body {
+  background-color: black;
+  height: 100vh;
+}
+
+label {
+  margin: 3px;
+}
+
+input {
+  width: 95%;
+  margin: 2px;
+}
+Form{
+  border: 1px solid white;
+  padding: 15px;
+}
