@@ -10,7 +10,9 @@ import './App.css';
 import Test from './page/Test'
 import Greeting from './for information/demo';
 import Formdata from './page/Formdata';
-import Backup from './for information/Backup'
+import Backup from './Bacup/Validation'
+import Check from './for information/check'
+import Objects from './for information/object';
 
 function App() {
 
@@ -27,13 +29,17 @@ function App() {
     </Router> */}
    
   {/* <Formdata/> */}
-   <Test/>
    {/* <Home/> */}
    {/* <InputForm/> */}
    {/* <Pagination/> */}
-    <Backup/>
+    {/* <Backup/> */}
+   {/* <Test/> */}
   {/* <Greeting/> */}
+  <Check/>
 
+
+
+{/* <Objects/> */}
     </>
     
   );

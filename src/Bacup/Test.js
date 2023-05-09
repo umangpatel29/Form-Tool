@@ -10,8 +10,7 @@ function Test() {
   const [formname, setFormname] = useState()
   const [isDisabled, setIsDisabled] = useState(false);
 
-console.log(options, "dd");
-
+  console.log(inputValue, "value");
   const handleInputChange = (index, key, value) => {
     const updatedOptions = [...options];
     updatedOptions[index][key] = value;
@@ -25,13 +24,13 @@ console.log(options, "dd");
     label: label,
     type: type
   }
-
+  console.log(inputdata, "sadfdsfs");
   function handleLabelChange(event) {
     setLabel(event.target.value);
   }
   function handleInputTypeChange(event) {
     setType(event.target.value);
-  } 
+  }
 
   const handleSelectChange = (event) => {
     const value = event.target.value;
@@ -55,7 +54,6 @@ console.log(options, "dd");
     const abc = formdata;
     abc.push(args);
     setFormData(abc)
-    console.log(abc, " abc");
   }
   const removeData = (id) => {
     const removedata = [...formdata];
@@ -65,56 +63,39 @@ console.log(options, "dd");
   }
 
 
-  //*******************validation */
-  const [validField, setValidField] = useState({
-    min: '',
-    max: ''
-  });
-
-  const handleCheckboxChange = (event) => {
-    const { name, type, checked, value } = event.target;
-    const newValue = type === 'checkbox' ? checked : value;
-
-    setValidField(prevState => ({
-      ...prevState,
-      [name]: newValue
-    }));
-  };
-
-  //*******************select  */
-  const [select, setSelect] = useState([]);
-
-  const handleChange = (e) => {
-    setSelect(e.target.value.split(";"));
-  };
 
   const submit = () => {
 
     if (inputType === 'text') {
-      addFormData({ "input": type, "props": { "name": label.replace(/\s+/g, ''), "label": label, "value": label }, validField });
-    }
-
-    else if (inputType === 'password') {
-      addFormData({ "input": inputType, "props": { "name": "password", "label": label, "value": "" }, validField });
+      addFormData({ "input": type, "props": { "name": label.replace(/\s+/g, ''), "label": label, "value": "" } });
+    } else if (inputType === 'lastname') {
+      addFormData({ "input": "text", "props": { "name": "lastName", "value": "" } });
+    } else if (inputType === 'email') {
+      addFormData({ "input": inputType, "props": { "name": "email", "value": "" } });
+    } else if (inputType === 'password') {
+      addFormData({ "input": inputType, "props": { "name": "password", "value": "" } });
+    } else if (inputType === 'number') {
+      addFormData({ "input": inputType, "props": { "name": "contact", "value": "" } });
     } else if (inputType === 'checkbox') {
-      addFormData({ "input": inputType, "props": { "name": inputValue, "options": options }, validField });
+      addFormData({ "input": inputType, "props": { "name": inputValue, "options": options } });
     } else if (inputType === 'radio') {
-      addFormData({ "input": inputType, "props": { "name": inputValue, "options": options }, validField });
+      addFormData({ "input": inputType, "props": { "name": inputValue, "options": options } });
     } else if (inputType === 'date') {
-      addFormData({ "input": inputType, "props" : {"name" : label, "label" : label}, validField });
+      addFormData({ "input": inputType });
     } else if (inputType === "textarea") {
-      addFormData({ "input": inputType, "props": { "name": label, "label" : label }, validField });
+      addFormData({ "input": inputType, "props": { "name": "Textarea", "value": inputValue } });
     } else if (inputType === "select") {
-      addFormData({ "input": inputType, "props": { "name": label, "label": label, "value": select }, validField })
+      addFormData({ "input": inputType, "props": { "name": "select", "value": inputValue } })
     } else if (inputType === "file") {
-      addFormData({ "input": inputType, "props": { "name": "file", "value": inputValue }, validField })
+      addFormData({ "input": inputType, "props": { "name": "file", "value": inputValue } })
     }
     setInputType("")
     setOptions([]);
     setIsDisabled(true);
     setType("")
     setLabel("")
-    setValidField({ min: "", max: "" })
+
+    console.log("here", inputValue);
   };
 
   const Data = {
@@ -139,7 +120,8 @@ console.log(options, "dd");
                 value={label}
                 onChange={handleLabelChange}
               />
-              <label htmlFor="type" className='my-2'>Label Type :</label>
+
+              <label htmlFor="type">Select Field:</label>
               <select name="type" id="type" value={type} onChange={handleInputTypeChange}>
                 <option value="">Select Type</option>
                 <option value="text">Text</option>
@@ -147,28 +129,6 @@ console.log(options, "dd");
                 <option value="tel">Contact</option>
                 <option value="button">Button</option>
               </select>
-            </div>
-          </div>
-        );
-      case 'password':
-        return (
-          <div class="form-group d-flex justify-content-around">
-            <div>
-              <label htmlFor="label">Label Name : </label><br />
-              <input
-                type="text"
-                name="label"
-                value={label}
-                onChange={handleLabelChange}
-              />
-            </div>
-            <div>
-              <label>Password : </label><br />
-              <input
-                type='password'
-                placeholder='just for demo.'
-                onChange={(event) => setInputValue(event.target.value)}>
-              </input>
             </div>
           </div>
         );
@@ -192,37 +152,18 @@ console.log(options, "dd");
         );
       case 'textarea':
         return (
-          <div>
-          <label htmlFor="label">Label of Textarea : </label>
-              <input
-                type="text"
-                name="label"
-                value={label}
-                onChange={handleLabelChange}
-              />
           <div class="form-group">
-            <label for="exampleFormControlTextarea1" style={{float:"left", margin:"8px"}}>{label ? label : "Example"} : </label>
+            <label for="exampleFormControlTextarea1">Example textarea</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
               value={inputValue}
               onChange={(event) => setInputValue(event.target.value)}>
             </textarea>
           </div>
-          </div>
         );
       case 'date':
         return (
-          <div class="form-group">
-            <div>
-            <label htmlFor="label">Label Name : </label><br />
-              <input
-                type="text"
-                name="label"
-                value={label}
-                onChange={handleLabelChange}
-              />
-              </div>
-              <div className='mt-2'>
-            <label htmlFor="input-text">{label}:</label>
+          <div>
+            <label htmlFor="input-text">Date:</label>
             <input
               type="date"
               id="input-date"
@@ -230,49 +171,28 @@ console.log(options, "dd");
               disabled
               onChange={(event) => setInputValue(event.target.value)}
             />
-            </div>
           </div>
         );
       case "select":
         return (
           <div>
-            <div>
-              <label htmlFor="label">Label Name</label>
-              <input
-                type="text"
-                name="label"
-                value={label}
-                onChange={handleLabelChange}
-              />
-            </div>
-            <div className='form-group mt-3 d-flex'>
-              <div>
-                <label htmlFor="options">Options:</label>
-                <input type="text" id="options" placeholder='option seperate by ;' onChange={handleChange} />
-              </div>
-              <div>
-                <label htmlFor="select">Select option:</label>
-                <select id="select" style={{width:"100px"}}>
-                  {select.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
+            <label for="cars">Choose a car:</label>
+            <select name="cars" id="cars" value={inputValue} onChange={(event) => setInputValue(event.target.value)}>
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+              <option value="mercedes">Mercedes</option>
+              <option value="audi">Audi</option>
+            </select>
           </div>
         );
       case 'radio':
         return (
           <div>
-            <label htmlFor="input-radio-name">Radio Name : </label>
-            <div>
+            <label htmlFor="input-radio-name">Radio Name:</label>
+            <div className='d-flex'>
               <input
                 type="text"
                 id="input-radio-name"
-                placeholder='Gender..'
                 value={inputValue}
                 onChange={(event) => setInputValue(event.target.value)}
               />
@@ -282,25 +202,25 @@ console.log(options, "dd");
             <label>Options:</label>
             {options.length}
             {options.map((option, index) => (
-              <div key={index} className='my-2'>
-                <label htmlFor="">Label of Radio</label>
-                <input className='me-3'
+              <div key={index}>
+                <label htmlFor="">label</label>
+                <input
                   type="text"
                   value={option.label}
-                  placeholder='...'
                   onChange={(event) =>
                     handleInputChange(index, "label", event.target.value)
                   }
-                /> {option.label} : <input type="radio" className='mx-2' />
-                {/* <label htmlFor="">Example :</label>
+
+                />
+                <label htmlFor="">value</label>
                 <input
-                  type="radio"
+                  type="text"
                   value={option.value}
                   onChange={(event) =>
                     handleInputChange(index, "value", event.target.value)
                   }
-                /> */}
-                <Button onClick={() => handleRemoveOption(index)} className='btn-warning fw-bold mx-2'>-</Button>
+                />
+                <Button onClick={() => handleRemoveOption(index)} className='btn-warning fw-bold'>-</Button>
               </div>
             ))}
 
@@ -310,26 +230,29 @@ console.log(options, "dd");
         return (
           <div>
             <div>
-              <label htmlFor="label">Checkbox Name :</label>
-              <input
-                type="text"
-                value={inputValue}
-                placeholder='Hobby...'
-                onChange={(event) => setInputValue(event.target.value)}
-              /><Button onClick={handleAddOption} className='btn-secondary fw-bold'>+</Button> <br />
-
-              <label>Options :</label>
+              <label htmlFor="input-radio-name">Check box:</label>
+              <div className='d-flex'>
+                <input
+                  type="text"
+                  id="input-checkbox"
+                  value={inputValue}
+                  onChange={(event) => setInputValue(event.target.value)}
+                />
+                <Button onClick={handleAddOption} className='btn-secondary fw-bold'>+</Button>
+              </div>
+              <br />
+              <label>Options:</label>
               {options.map((option, index) => (
-                <div key={index} className='my-1'>
-                  <label htmlFor="">label Name : </label>
-                  <input className='me-3'
+                <div key={index}>
+                  <label htmlFor="">label</label>
+                  <input
                     type="text"
                     value={option.label}
                     onChange={(event) =>
                       handleInputChange(index, "label", event.target.value)
                     }
-                  />{option.label} : <input type="radio" className='mx-2' />
-                  <Button onClick={() => handleRemoveOption(index)} className='btn-warning fw-bold mx-2'>-</Button>
+                  />
+                  <Button onClick={() => handleRemoveOption(index)} className='btn-warning fw-bold'>-</Button>
                 </div>
               ))}
             </div>
@@ -346,74 +269,35 @@ console.log(options, "dd");
     <>
       <div className="container border">
         <div className="row">
-          <div className="col">
-            <div className=' p-2'>
-              <div className='d-flex justify-content-around'>
-                <div>
-                  <label htmlFor="">Your Form Name:</label><br />
-                  <input type="text" value={formname} onChange={(event) => setFormname(event.target.value)} disabled={isDisabled} />
-                </div>
-                <div>
-                  <label htmlFor="input-type">Input Type:</label><br />
-                  <select id="input-type" value={inputType} onChange={handleSelectChange} className='p-1'>
-                    <option value="">Select an input type</option>
-                    <option value="text">Text</option>
-                    <option value="radio">Radio</option>
-                    <option value="checkbox">checkbox</option>
-                    <option value="password">Password</option>
-                    <option value="date">date</option>
-                    <option value="textarea">textarea</option>
-                    <option value="select">Select</option>
-                    <option value="file">file</option>
-                  </select>
-                </div>
+          <div className="col border">
+            <div className=' p-4'>
+              <div>
+                <label htmlFor="">Your Form Name:</label><br />
+                <input type="text" value={formname} onChange={(event) => setFormname(event.target.value)} disabled={isDisabled} />
               </div>
-
-              <div className='mt-3'>
-                <div className='m-auto text-center border p-3'>
+              <div className='my-3'>
+                <label htmlFor="input-type">Input Type:</label><br />
+                <select id="input-type" value={inputType} onChange={handleSelectChange} className='p-1'>
+                  <option value="">Select an input type</option>
+                  <option value="text">Text</option>
+                  <option value="radio">Radio</option>
+                  <option value="checkbox">checkbox</option>
+                  <option value="password">Password</option>
+                  <option value="date">date</option>
+                  <option value="textarea">textarea</option>
+                  <option value="select">Select</option>
+                  <option value="file">file</option>
+                </select>
+                <br />
+                <div className='mt-3'>
                   {renderInputField()}
-                </div>
-
-                <h5 className='mt-5'>Validation : </h5>
-                <div className='d-flex'>
-                  <div>
-                    <label>
-                      <input type="checkbox" name="require" checked={validField.require} onChange={handleCheckboxChange} />
-                      Require
-                    </label>
+                  <div className='mt-3'>
+                    <input type="checkbox" id="required" />
+                    <label for="required">Required</label>
                   </div>
-                  <div>
-                    <label>
-                      <input type="checkbox" name="alphabet" checked={validField.alphabet} onChange={handleCheckboxChange} />
-                      Alphabet
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      <input type="checkbox" name="alphanum" checked={validField.alphanum} onChange={handleCheckboxChange} />
-                      Alphanumeric
-                    </label>
-                  </div>
-                </div>
-                <div className='d-flex mt-3'>
-                  <div>
-                    <label>
-                      Min Value :
-                      <input type="number" name="min" value={validField.min} onChange={handleCheckboxChange} style={{ width: "100px" }} />
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      Max Value :
-                      <input type="number" name="max" value={validField.max} onChange={handleCheckboxChange} style={{ width: "100px" }} />
-                    </label>
-                  </div>
-                </div>
-                <div className='text-center'>
-                  <Button onClick={submit} className='m-3 btn-success'>Add Data</Button>
+                  <Button onClick={submit} className='m-3'>submit</Button>
                 </div>
               </div>
-
             </div>
           </div>
           <div className="col border d-flex justify-content-center align-items-center">
@@ -424,20 +308,18 @@ console.log(options, "dd");
                   console.log(item, "dsd");
                   return (
                     <div>
-                      {(item.input === "text" || item.input === "email" || item.input === "tel" || item.input === "button") &&
-                        <div key={id}>
-                          <label>{item.props.label}</label><br />
-                          <input type={item.input} name={item.props.name} value={item.props.name}/>
-                          <Button onClick={() => removeData(id)} className='btn-warning fw-bold mx-2'>-</Button>
-                        </div>
-                      }
-                      {item.input === "password" &&
+                      <div key={id}>
+                        <label>{item.props.label}</label><br />
+                        <input type={item.input} name={item.props.name} />
+                        <Button onClick={() => removeData(id)} className='btn-warning fw-bold'>-</Button>
+                      </div>
+                      {/* {item.input === "text" &&
                         <div>
                           <label htmlFor="">{item.props.name}</label><br />
                           <input type={item.input} value={item.props.value} />
                           <Button onClick={() => removeData(id)} className='btn-warning fw-bold'>-</Button>
                         </div>
-                      }
+                      } */}
 
                       {item.input === "textarea" &&
                         <div>
@@ -448,7 +330,7 @@ console.log(options, "dd");
                           <Button onClick={() => removeData(id)} className='btn-warning fw-bold'>-</Button>
                         </div>
                       }
-                      {item.file === "file" &&
+                      {item.input === "file" &&
                         <div>
                           <div style={{ overflow: "hidden" }}>
                             <img src={item.props.value} alt="dd" style={{ width: "100px", height: " 100px" }} />
@@ -456,27 +338,26 @@ console.log(options, "dd");
                           <Button onClick={() => removeData(id)} className='btn-warning fw-bold'>-</Button>
                         </div>
                       }
-                      {item.select === "select" &&
+                      {item.input === "select" &&
                         <div>
-                          <label htmlFor="cars">{item.props.label}:</label>
-                          <select id="select">
-                            {item.props.value.map((option, index) => (
-                              <option key={index} value={option}>
-                                {option.split(":")}
-                              </option>
-                            ))}
+                          <label htmlFor="cars">Choose a car:</label>
+                          <select value={item.props.value} name="cars" id="cars">
+                            <option value="volvo">Volvo</option>
+                            <option value="saab">Saab</option>
+                            <option value="mercedes">Mercedes</option>
+                            <option value="audi">Audi</option>
                           </select>
                           <Button onClick={() => removeData(id)} className='btn-warning fw-bold'>-</Button>
                         </div>
                       }
                       {item.input === "radio" &&
                         <div>
-                          <label>{item.props.name}</label> <br />
+                          <h5>{item.props.name}</h5>
                           {item.props.options.map((opt, ids) => {
                             return (
                               <div key={ids} className='form-check form-check-inline'>
                                 <label htmlFor="" className='form-check-label'>{opt.label}</label>
-                                <input type="radio" value={opt.value} name='radio' className='form-check-input' />
+                                <input type="radio" value={opt.value} className='form-check-input' />
                               </div>
                             )
                           })}
@@ -485,7 +366,7 @@ console.log(options, "dd");
                       }
                       {item.input === "checkbox" &&
                         <div>
-                          <label>{item.props.name}</label> <br />
+                          <h5>{item.props.name}</h5>
                           {item.props.options.map((opt, ids) => {
                             return (
                               <div key={ids} className='form-check form-check-inline'>
@@ -508,6 +389,7 @@ console.log(options, "dd");
                 })
               }
               <button onClick={handlefinalSubmit} className='btn btn-primary m-3'>submit all your data</button>
+
             </div>
           </div>
         </div>

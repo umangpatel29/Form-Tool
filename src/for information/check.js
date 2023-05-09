@@ -1,21 +1,24 @@
 import { useState } from 'react';
 
+
 function Form() {
-    const [formValues, setFormValues] = useState({});
     const [formErrors, setFormErrors] = useState({});
+    const [formValues, setFormValues] = useState();
 
     const storedFormData = localStorage.getItem('register');
     const fields = storedFormData && JSON.parse(storedFormData);
-    const { data, name: fieldName } = fields || {};
+    const { data } = fields
     const formData = data;
     console.log(formData);
+    console.log(formValues, "ssd");
 
     const handleChange = (e) => {
+
         const { name, value, type, checked } = e.target;
         const error = validateField(name, type === 'checkbox' ? checked : value, formData);
 
-        // Handle text inputs and checkboxes
         setFormValues((prevValues) => {
+
             if (type === 'checkbox') {
                 return {
                     ...prevValues,
@@ -55,10 +58,9 @@ function Form() {
             error = `Minimum length is ${field.validField.min} characters`;
         } else if (field.validField.max !== '' && value.length > field.validField.max) {
             error = `Maximum length is ${field.validField.max} characters`;
-        } else if (field.validField.alphanum && !/^[a-zA-Z0-9]+$/.test(value)) {
+        } else if (field.validField.alphanum && !/^[a-zA-Z0-9@.]+$/.test(value)) {
             error = 'Only alphanumeric characters are allowed';
         }
-
         return error;
     };
 
@@ -72,18 +74,47 @@ function Form() {
         });
         return errors;
     };
+
+
     return (
         <form onSubmit={handleSubmit}>
             {formData.map((field) => (
                 <div key={field.props.name}>
                     <label>{field.props.label}</label>
-                    {field.input === 'text' && (
-                        <input
-                            type={field.input}
-                            name={field.props.name}
-                            onChange={handleChange}
-                            error={formErrors[field.props.name]}
-                        />
+                    {['text', 'password', 'email', 'date', 'textarea', 'file'].includes(field.input) && (
+                        <>
+                            {field.input === 'file' && (
+                                <div>
+                                    <input
+                                        type={field.input}
+                                        name={field.props.name}
+                                        id={field.props.name}
+                                        accept="image/*"
+                                        onChange={event => {
+                                            const img = event.target.files[0];
+                                            // setFile(URL.createObjectURL(img));
+                                            setFormValues({...formValues, 'file': URL.createObjectURL(img)}); // set the file value in Formik form values
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            {field.input === 'textarea' && (
+                                <textarea
+                                    name={field.props.name}
+                                    onChange={handleChange}
+                                    error={formErrors[field.props.name]}
+                                />
+                            )}
+                            {['text', 'password', 'email', 'date', "button"].includes(field.input) && (
+                                <input
+                                    type={field.input}
+                                    name={field.props.name}
+                                    // value={field.props.value}
+                                    onChange={handleChange}
+                                    error={formErrors[field.props.name]}
+                                />
+                            )}
+                        </>
                     )}
                     {field.input === 'radio' && (
                         <>
@@ -122,22 +153,25 @@ function Form() {
                         <div>
                             <select name={field.props.name} onChange={handleChange}>
                                 <option value="">{field.props.label}</option>
-                                {field.props.value.map((fruit) => (
-                                    <option key={fruit} value={fruit}>
+                                {field.props.value.map((fruit, id) => (
+                                    <option key={id} value={fruit}>
                                         {fruit}
                                     </option>
                                 ))}
                             </select>
                         </div>
                     )}
-                    
                     {formErrors[field.props.name] && (
                         <span style={{ color: 'red' }}>{formErrors[field.props.name]}</span>
                     )}
                 </div>
             ))}
             <button type="submit">Submit</button>
+            <div>
+                {formValues && <img src={formValues.file} alt="Selected file" width={300} height={200} className='float-end' />}
+            </div>
         </form>
     );
 }
 export default Form
+

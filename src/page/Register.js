@@ -80,8 +80,6 @@ const RegisterForm = () => {
                 return 'Weak';
             case 3:
                 return 'not bad';
-            case 4:
-                return '';
             default:
                 return '';
         }

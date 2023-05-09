@@ -39,46 +39,50 @@ function Home() {
   }, [offset, sortOrder]);
 
 
-    return (
-      <div className="container table-container">
-        <table className="table table-striped text-center">
-          <thead>
-            <tr>
-              <th onClick={handleSort} style={{cursor:"pointer"}}>first Name {sortOrder === 'asc' ? '▲' : '▼'}</th>
-              <th>last name</th>
-              <th>edit</th>
-              <th>delete</th>
-            </tr>
-          </thead>
-          <tbody className="text-center">
-            {posts.map((item, index) => (
-              <tr key={index}>
-                <td>{item.name}</td>
-                <td>{item.username}</td>
-                <td><i class="fa-solid fa-pen-to-square" ></i></td>
-                <td><i class="fa-solid fa-trash"></i></td>
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col table-container">
+          <table className="table table-striped text-center">
+            <thead>
+              <tr>
+                <th onClick={handleSort} style={{ cursor: "pointer" }}>first Name {sortOrder === 'asc' ? '▲' : '▼'}</th>
+                <th>last name</th>
+                <th>edit</th>
+                <th>delete</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="my-3">
-          <ReactPaginate
-            previousLabel={"previous"}
-            nextLabel={"next"}
-            breakLabel={"..."}
-            breakClassName={"break-me"}
-            pageCount={pageCount}
-            onPageChange={handlePageClick}
-            containerClassName={"pagination"}
-            subContainerClassName={"pages pagination"}
-            previousLinkClassName={"previousBttn"}
-            nextLinkClassName={"nextBttn"}
-            activeClassName={"active"}
-          />
+            </thead>
+            <tbody className="text-center">
+              {posts.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.name}</td>
+                  <td>{item.username}</td>
+                  <td><i class="fa-solid fa-pen-to-square" ></i></td>
+                  <td><i class="fa-solid fa-trash"></i></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="my-3 d-flex justify-content-center">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={pageCount}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              previousLinkClassName={"previousBttn"}
+              nextLinkClassName={"nextBttn"}
+              activeClassName={"active"}
+            />
+          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 
-  export default Home;
+export default Home;

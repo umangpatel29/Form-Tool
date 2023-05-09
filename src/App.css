@@ -11,12 +11,17 @@ body {
 }
 
 label {
-  margin: 3px;
+  margin: 5px;
+  color: white;
+}
+.error-message{
+  color: white;
 }
 
 input {
-  width: 95%;
   margin: 2px;
+  padding: 2px;
+  font-size: 15px;
 }
 Form{
   border: 1px solid white;
