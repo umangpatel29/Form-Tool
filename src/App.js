@@ -1,18 +1,17 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './page/LoginForm';
 import Register from './page/Register';
 import Home from './page/Home';
 import Protected from './Protected';
 import Errorpage from './page/Errorpage';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import Test from './page/Test'
+import Test from './page/Devloped'
 import Greeting from './for information/demo';
-import Formdata from './page/Formdata';
 import Backup from './Bacup/Validation'
-import Check from './for information/check'
-import Objects from './for information/object';
+import View from './page/ViewPage'
+import Fetch from './for information/fetch';
 
 function App() {
 
@@ -27,19 +26,25 @@ function App() {
       <Route path='*' element= {<Errorpage/>}/>
       </Routes>
     </Router> */}
-   
-  {/* <Formdata/> */}
+
+<Router>
+  <Routes>
+  <Route  path="/" element={<Home/>} />
+        <Route path="/devlop/:id?" element={<Test/>} />
+        <Route path="/view/:id" element={<View/>} />
+  </Routes>
+</Router>
+
+
    {/* <Home/> */}
-   {/* <InputForm/> */}
-   {/* <Pagination/> */}
+   
     {/* <Backup/> */}
-   {/* <Test/> */}
   {/* <Greeting/> */}
-  <Check/>
+   {/* <Test/> */}
+  {/* <Check/> */}
 
+{/* <Fetch/> */}
 
-
-{/* <Objects/> */}
     </>
     
   );

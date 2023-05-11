@@ -1,11 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@400;500&display=swap");
+
 #root {
   height: 100vh;
-
-
+  font-family: "Poppins", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
 }
 
 .table-container {
-  background-color: white;
+  background-color: #e0f0ff;
   height: 100vh;
 }
 
@@ -15,17 +17,14 @@
   height: 100vh;
   padding: 20px;
 }
-.row{
-    height: 100%;
+.row {
+  height: 100%;
 }
 
 .col {
   width: auto;
   margin: 3px;
 }
-
-
-
 
 /* //////  pagenation page */
 
@@ -40,24 +39,18 @@
 }
 
 .pagination li {
-  /* border: 1px solid black; */
   margin: 13px;
-  padding: px;
+  padding: 5px 10px;
   font-size: 18px;
-  color: black;
-  /* border-radius: 8px; */
   cursor: pointer;
 }
 
 .pagination li:hover {
-  /* background-color: rgb(73, 154, 225); */
-  color: rgb(15, 3, 3);
-  border: 4px solid rgb(188, 224, 255);
+  border: 4px solid rgb(220, 220, 220);
 }
 
 .pagination .active {
-  /* background-color: aqua; */
-  border-bottom: 3px solid blue;
-  border-top: 3px solid blue;
-  color: blue;
+  border-bottom: 3px solid rgb(130, 130, 130);
+  border-top: 3px solid rgb(130, 130, 130);
+  color: rgb(130, 130, 130);
 }

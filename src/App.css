@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 body {
@@ -11,7 +10,7 @@ body {
 }
 
 label {
-  margin: 5px;
+  margin: 5px 10px 0px 5px;
   color: white;
 }
 .error-message{
@@ -26,4 +25,5 @@ input {
 Form{
   border: 1px solid white;
   padding: 15px;
+  width: 20rem;
 }

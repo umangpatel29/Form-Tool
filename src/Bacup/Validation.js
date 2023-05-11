@@ -1,198 +1,172 @@
-import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
-import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
+import { useState } from 'react';
 
-function createValidationSchema(data, values) {
-  let schema = {};
-  // console.log(values);
-  data.forEach(field => {
-    const validField = field.validField;
-    let fieldRules = Yup.string();
-    console.log(validField, "validfield");
+function Form() {
+    const [formValues, setFormValues] = useState({});
+    const [formErrors, setFormErrors] = useState({});
 
-    if (validField.require) {
-      fieldRules = fieldRules.required("Field is required");
-    }
-    if (validField.min) {
-      fieldRules = fieldRules.min(Number(validField.min), `Field must be at least ${validField.min} characters`);
-    }
-    if (validField.max) {
-      fieldRules = fieldRules.max(Number(validField.max), `Field must be at most ${validField.max} characters`);
-    }
-    if (validField.alphabet) {
-      fieldRules = fieldRules.matches(/^[A-Za-z\s]+$/, "Field must contain only alphabets");
-    }
-    if (validField.alphanum) {
-      fieldRules = fieldRules.matches(/^[A-Za-z0-9@.]+$/, "alphanumeric characters required '@' '.'");
-    }
+    const storedFormData = localStorage.getItem('register');
+    const fields = storedFormData && JSON.parse(storedFormData);
+    const { data } = fields;
+    const formData = data;
+    console.log(formData);
 
-    schema[field.props.name] = fieldRules;
-  });
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        const error = validateField(name, type === 'checkbox' ? checked : value, formData);
 
-  return Yup.object().shape(schema);
-}
+        // Handle text inputs and checkboxes
+        setFormValues((prevValues) => {
+            if (type === 'checkbox') {
+                return {
+                    ...prevValues,
+                    [name]: [...(prevValues[name] || []), value].filter((v, i, a) => a.indexOf(v) === i),
+                };
+            } else {
+                return {
+                    ...prevValues,
+                    [name]: value,
+                };
+            }
+        });
 
-//************password validation */
-const passwordStrengthMsg = (password) => {
-  let passwordStrength = 0;
-  if (password.match(/[A-Z]/)) {
-    passwordStrength += 1;
-  }
-  if (password.match(/[a-z]/)) {
-    passwordStrength += 1;
-  }
-  if (password.match(/\d/)) {
-    passwordStrength += 1;
-  }
-  if (password.match(/[!@#$%^&*]/)) {
-    passwordStrength += 1;
-  }
-  switch (passwordStrength) {
-    case 0:
-    case 1:
-      return 'Very Weak';
-    case 2:
-      return 'Weak';
-    case 3:
-      return 'not bad';
-    default:
-      return '';
-  }
-};
+        setFormErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: error,
+        }));
+    };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const errors = validateForm(formValues, formData);
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+        } else {
+            console.log(formValues);
+        }
+    };
 
-function DynamicForm() {
+    const validateField = (name, value, formData) => {
+        const field = formData.find((field) => field.props.name === name);
+        let error = '';
 
-  const [file, setFile] = useState()
+        if (field.validField.require && !value) {
+            error = 'This field is required';
+        } else if (field.validField.min !== '' && value.length < field.validField.min) {
+            error = `Minimum length is ${field.validField.min} characters`;
+        } else if (field.validField.max !== '' && value.length > field.validField.max) {
+            error = `Maximum length is ${field.validField.max} characters`;
+        } else if (field.validField.alphanum && !/^[a-zA-Z0-9]+$/.test(value)) {
+            error = 'Only alphanumeric characters are allowed';
+        }
 
-  const storedFormData = localStorage.getItem("login");
-  const fields = JSON.parse(storedFormData);
-  const { data, name } = fields
-  // console.log(fields, "formdata");
+        return error;
+    };
 
-  if (!data || data.length === 0) {
-    return <div>No fields found.</div>;
-  }
-
-  const validationSchema = createValidationSchema(data);
-
-console.log(file, "Sda");
-  return (
-    <Formik
-      initialValues={{}}
-      validationSchema={validationSchema}
-      onSubmit={values => {
-        // Handle form submission
-        console.log(values, "sshkjshkdshk");
-      }}
-    >
-      {({ isValid, dirty, values }) => (
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <div className='d-flex justify-content-center align-items-center h-100'>
-                <Form>
-                  {data.map(field => {
-                    const { options, value } = field.props;
-
-                    console.log(field, "field");
-                    return (
-                      <div>
-                        {field.input &&
-                          <div key={field.props.name} className='m-2'>
-                            <label htmlFor={field.props.name}>{field.props.label}</label><br />
-                            <Field type={field.input} name={field.props.name} />
-                            <ErrorMessage name={field.props.name} component="div" className="error-message" />
-                            {/* {values.password && <div>{passwordStrengthMsg(values.password)}</div>} */}
-                          </div>
-                        }
-                        {
-                          field.radio &&
-                          <div>
-                            <label>{field.props.name} :</label>
-                            <div className='d-flex'>{
-                              options.map((rad) => {
-                                // console.log(field.radio);
-                                return (
-                                  <div key={rad.label}>
-                                    <label>{rad.label}</label>
-                                    <Field type={field.radio} name="radio" value={rad.label} />
-                                  </div>
-                                )
-                              })}
-                              <ErrorMessage name={field.props.name} component="div" className="error-message" />
-                            </div>
-                          </div>
-                        }
-                        {
-                          field.checkbox &&
-                          <div>
-                            <label>{field.props.name} :</label>
-                            <div className='d-flex'>{
-                              options.map((check) => {
-                                return (
-                                  <div key={check.label} className='m-2'>
-                                    <label>{check.label}</label>
-                                    <Field type={field.checkbox} name="checked" value={check.label} />
-                                  </div>
-                                )
-                              })}
-                            </div>
-                            
-                          </div>
-                        }
-                        {
-                          field.select &&
-                          <div>
-                            <label>{field.props.name} :</label>
-                            <div>
-                              <Field name="select" as="select">
-                                <option value="">{field.props.name}</option>
-                                {value.map((fruit) => (
-                                  <option key={fruit} value={fruit}>
-                                    {fruit}
-                                  </option>
+    const validateForm = (formValues, formData) => {
+        const errors = {};
+        formData.forEach((field) => {
+            const error = validateField(field.props.name, formValues[field.props.name], formData);
+            if (error !== '') {
+                errors[field.props.name] = error;
+            }
+        });
+        return errors;
+    };
+    return (
+        <form onSubmit={handleSubmit}>
+            {formData && formData.map((field) => (
+                <div key={field.props.name}>
+                    <label>{field.props.label}</label>
+                    {['text', 'password', 'email', 'date', 'textarea', 'file'].includes(field.input) && (
+                        <>
+                            {field.input === 'file' && (
+                                <div>
+                                    <input
+                                        type={field.input}
+                                        name={field.props.name}
+                                        id={field.props.name}
+                                        accept="image/*"
+                                        onChange={event => {
+                                            const img = event.target.files[0];
+                                            // setFile(URL.createObjectURL(img));
+                                            setFormValues({...formValues, 'file': URL.createObjectURL(img)});
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            {field.input === 'textarea' && (
+                                <textarea
+                                    name={field.props.name}
+                                    onChange={handleChange}
+                                    error={formErrors[field.props.name]}
+                                />
+                            )}
+                            {['text', 'password', 'email', 'date', "button"].includes(field.input) && (
+                                <input
+                                    type={field.input}
+                                    name={field.props.name}
+                                    // value={field.props.value}
+                                    onChange={handleChange}
+                                    error={formErrors[field.props.name]}
+                                />
+                            )}
+                        </>
+                    )}
+                    {field.input === 'radio' && (
+                        <>
+                            {field.props.options.map((option, index) => (
+                                <div key={`${field.props.name}-${index}`}>
+                                    <input
+                                        type={field.input}
+                                        name={field.props.name}
+                                        value={option.label}
+                                        checked={field.validField.require ? null : "checked"}
+                                        onChange={handleChange}
+                                        error={formErrors[field.props.name]}
+                                    />
+                                    <label>{option.label}</label>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                    {field.input === 'checkbox' && (
+                        <>
+                            {field.props.options.map((option, index) => (
+                                <div key={`${field.props.name}-${index}`}>
+                                    <input
+                                        type={field.input}
+                                        name={field.props.name}
+                                        value={option.label}
+                                        onChange={handleChange}
+                                        error={formErrors[field.props.name]}
+                                    />
+                                    <label>{option.label}</label>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                    {field.input === 'select' && (
+                        <div>
+                            <select name={field.props.name} onChange={handleChange}>
+                                <option value="">{field.props.label}</option>
+                                {field.props.value.map((fruit, id) => (
+                                    <option key={id} value={fruit}>
+                                        {fruit}
+                                    </option>
                                 ))}
-                              </Field>
-                               <ErrorMessage name={field.props.name} component="div" className="error-message" />
-                            </div>
-                           
-                          </div>
-                        }
-                        {
-                          field.file &&
-                          <div>
-                            <label htmlFor="formFile" className="form-label">Select a file:</label>
-                            <Field
-                              type="file"
-                              className="form-control"
-                              name= {field.props.name}
-                              id="formFile"
-                              accept="image/*"
-                              onChange={event => {
-                                const file = event.target.files[0];
-                                setFile(URL.createObjectURL(file));
-                                // setFieldValue("file", file); // set the file value in Formik form values
-                              }}
-                            />
-                             <ErrorMessage name={field.props.name} component="div" className="error-message" />
-                          </div>
-                        }
-                      </div>
-                    )
-                  })}
-                  <div className='text-center mt-4'>
-                    <button className='py-1 px-3' type="submit">Submit</button>
-                  </div>
-                </Form>
-              </div>
+                            </select>
+                        </div>
+                    )}
+                    {formErrors[field.props.name] && (
+                        <span style={{ color: 'red' }}>{formErrors[field.props.name]}</span>
+                    )}
+                </div>
+            ))}
+            <button type="submit">Submit</button>
+            <div>
+                {formValues && <img src={formValues.file} alt="Selected file" width={300} height={200} className='float-end' />}
             </div>
-          </div>
-          <img src={""} alt="antf" />
-        </div>
-      )}
-    </Formik>
-  );
+        </form>
+    );
 }
-
-export default DynamicForm;
+export default Form
