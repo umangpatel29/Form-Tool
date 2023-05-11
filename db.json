@@ -1,0 +1,42 @@
+{
+  "forms": [
+    {
+      "name": "register",
+      "data": [
+        {
+          "input": "text",
+          "props": {
+            "name": "firstname",
+            "label": "first name",
+            "value": ""
+          },
+          "validField": {
+            "min": "3",
+            "max": "",
+            "require": true
+          }
+        }
+      ],
+      "id": 3
+    },
+    {
+      "name": "login",
+      "data": [
+        {
+          "input": "text",
+          "props": {
+            "name": "firstname",
+            "label": "first name",
+            "value": ""
+          },
+          "validField": {
+            "min": "3",
+            "max": "",
+            "require": true
+          }
+        }
+      ],
+      "id": 4
+    }
+  ]
+}

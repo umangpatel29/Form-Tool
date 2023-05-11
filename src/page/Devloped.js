@@ -621,7 +621,7 @@ function Test() {
                           </Button>
                         </div>
                       )}
-                      {item.file === "file" && (
+                      {item.input === "file" && (
                         <div>
                           <div style={{ overflow: "hidden" }}>
                             <img
@@ -638,7 +638,7 @@ function Test() {
                           </Button>
                         </div>
                       )}
-                      {item.select === "select" && (
+                      {item.input === "select" && (
                         <div>
                           <label htmlFor="cars">{item.props.label}:</label>
                           <select id="select">

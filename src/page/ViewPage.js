@@ -16,19 +16,6 @@ function Form() {
       .catch((error) => console.log(error));
   }, [id]);
 
-  //   useEffect(() => {
-  //     axios
-  //       .get("http://localhost:3000/forms")
-  //       .then((response) => response.data)
-  //       .then((response) => {
-  //         setfields(response);
-  //         if (response.length > 0) {
-  //           setFormData(response[0].data);
-  //         }
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }, []);
-
   console.log(fields);
   const { data } = fields;
   const formData = data;
@@ -75,6 +62,7 @@ function Form() {
       setFormErrors(errors);
     } else {
       console.log(formValues);
+      formValues({})
     }
   };
 
@@ -133,45 +121,45 @@ function Form() {
                     "textarea",
                     "file",
                   ].includes(field.input) && (
-                    <>
-                      <label>{field.props.label} :</label>
-                      <br />
-                      {field.input === "file" && (
-                        <input
-                          type={field.input}
-                          name={field.props.name}
-                          id={field.props.name}
-                          accept="image/*"
-                          onChange={(event) => {
-                            const img = event.target.files[0];
-                            // setFile(URL.createObjectURL(img));
-                            setFormValues({
-                              ...formValues,
-                              file: URL.createObjectURL(img),
-                            });
-                          }}
-                        />
-                      )}
-                      {field.input === "textarea" && (
-                        <textarea
-                          name={field.props.name}
-                          onChange={handleChange}
-                          error={formErrors[field.props.name]}
-                        />
-                      )}
-                      {["text", "password", "email", "date", "tel"].includes(
-                        field.input
-                      ) && (
-                        <input
-                          type={field.input}
-                          name={field.props.name}
-                          // value={field.props.value}
-                          onChange={handleChange}
-                          error={formErrors[field.props.name]}
-                        />
-                      )}
-                    </>
-                  )}
+                      <>
+                        <label>{field.props.label} :</label>
+                        <br />
+                        {field.input === "file" && (
+                          <input
+                            type={field.input}
+                            name={field.props.name}
+                            id={field.props.name}
+                            accept="image/*"
+                            onChange={(event) => {
+                              const img = event.target.files[0];
+                              // setFile(URL.createObjectURL(img));
+                              setFormValues({
+                                ...formValues,
+                                file: URL.createObjectURL(img),
+                              });
+                            }}
+                          />
+                        )}
+                        {field.input === "textarea" && (
+                          <textarea
+                            name={field.props.name}
+                            onChange={handleChange}
+                            error={formErrors[field.props.name]}
+                          />
+                        )}
+                        {["text", "password", "email", "date", "tel"].includes(
+                          field.input
+                        ) && (
+                            <input
+                              type={field.input}
+                              name={field.props.name}
+                              // value={field.props.value}
+                              onChange={handleChange}
+                              error={formErrors[field.props.name]}
+                            />
+                          )}
+                      </>
+                    )}
                   {field.input === "radio" && (
                     <>
                       <label>{field.props.name} :</label>
@@ -228,23 +216,23 @@ function Form() {
                     </div>
                   )}
                   <div>
-                  {formErrors[field.props.name] && (
+                    {formErrors[field.props.name] && (
                       <span style={{ color: "red" }}>
-                      {formErrors[field.props.name]}
-                    </span>
-                  )}
+                        {formErrors[field.props.name]}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
-              <div className="mt-3">
-            <button type="submit" className="btn btn-primary mx-2">                
-              Submit
-            </button>
-            <Link to="/">
-              {" "}
-              <button className="btn btn-warning">Back</button>
-            </Link>
-              </div>
+            <div className="mt-3">
+              <button type="submit" className="btn btn-primary mx-2">
+                Submit
+              </button>
+              <Link to="/">
+                {" "}
+                <button className="btn btn-warning">Back</button>
+              </Link>
+            </div>
             {/* <div>
               {formValues && (
                 <img

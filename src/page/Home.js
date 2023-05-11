@@ -32,7 +32,6 @@ function Home() {
     axios
       .delete(`http://localhost:3000/forms/${id}`)
       .then((response) => {
-        setPosts([...posts])
         alert("success");
       })
       .catch((error) => {
@@ -94,7 +93,7 @@ function Home() {
                     </Link>
                   </td>
                   <td onClick={() => handleDelete(item.id)}>
-                    <i class="fa-solid fa-trash text-danger"></i>
+                    <i class="fa-solid fa-trash text-danger" style={{cursor:"pointer"}}></i>
                   </td>
                 </tr>
               ))}
