@@ -14,7 +14,7 @@ function Home() {
 
   const getAllPosts = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/forms`);
+      const res = await axios.get(`http://localhost:3000/forms`); 
       const data = res.data;
       const sortedData =
         sortOrder === "asc"
